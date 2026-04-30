@@ -20,6 +20,7 @@ SECRET_KEY = 'django-insecure-)9h9-g_c=+(eg4upquy6-2683wpm_qpa4v*5r8#=x(x9h7f)t@
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = ['https://stations-investigators-picture-enhancement.trycloudflare.com']
 
 # Application definition
 INSTALLED_APPS = [
