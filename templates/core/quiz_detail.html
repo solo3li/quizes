@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto animate-slide-up opacity-0">
+    <div class="glass rounded-3xl shadow-xl overflow-hidden border border-white/60">
+        <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-8 py-12 text-center relative overflow-hidden">
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4xNSkiLz48L3N2Zz4=')] opacity-30"></div>
+            
+            <h1 class="text-4xl font-black text-white mb-4 drop-shadow-md relative z-10">{{ quiz.title }}</h1>
+            <div class="flex items-center justify-center space-x-4 text-indigo-50 relative z-10 font-medium">
+                <span class="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-bold shadow-sm {% if quiz.difficulty == 'Easy' %}bg-green-500{% elif quiz.difficulty == 'Medium' %}bg-yellow-500{% else %}bg-red-500{% endif %} text-white">
+                    {{ quiz.difficulty }}
+                </span>
+                <span class="opacity-50">&bull;</span>
+                <span class="bg-white/20 px-4 py-1.5 rounded-full backdrop-blur-sm">{{ quiz.questions.count }} Questions</span>
+                <span class="opacity-50">&bull;</span>
+                <span class="bg-white/20 px-4 py-1.5 rounded-full backdrop-blur-sm">{{ quiz.created_at|date:"M d, Y" }}</span>
+            </div>
+        </div>
+        
+        <div class="p-12 text-center space-y-8 bg-white/40">
+            <p class="text-gray-600 text-xl font-medium">Are you ready to test your knowledge?</p>
+            
+            <a href="{% url 'take_quiz' quiz.id %}" class="inline-flex items-center justify-center px-10 py-5 border border-transparent text-xl font-black rounded-full shadow-lg text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 hover:shadow-2xl transform transition-all hover:scale-105 group relative overflow-hidden">
+                <span class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
+                <span class="relative flex items-center">
+                    Start Quiz Now
+                    <svg class="ml-3 w-6 h-6 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </span>
+            </a>
+            
+            <div class="mt-12 pt-8 border-t border-gray-200/50">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center justify-center gap-2">
+                    <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Past Attempts
+                </h3>
+                
+                {% if quiz.sessions.all %}
+                    <div class="space-y-4 max-w-lg mx-auto text-left">
+                    {% for session in quiz.sessions.all|dictsortreversed:"created_at" %}
+                        <a href="{% url 'quiz_result' session.id %}" class="block bg-white/70 backdrop-blur-md hover:bg-white border border-gray-100 rounded-2xl p-5 transition-all shadow-sm hover:shadow-md transform hover:-translate-y-1 group">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center gap-3">
+                                    <div class="p-2 rounded-lg {% if session.score >= session.total_questions|add:'-1' %}bg-green-100 text-green-600{% else %}bg-indigo-100 text-indigo-600{% endif %}">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    </div>
+                                    <span class="text-gray-600 font-medium">{{ session.created_at|date:"M d, Y h:i A" }}</span>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <span class="text-xl font-black {% if session.score >= session.total_questions|add:'-1' %}text-green-600{% else %}text-indigo-600{% endif %}">
+                                        {{ session.score }}<span class="text-sm text-gray-400 font-bold">/{{ session.total_questions }}</span>
+                                    </span>
+                                    <svg class="w-5 h-5 text-gray-400 group-hover:text-indigo-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                </div>
+                            </div>
+                        </a>
+                    {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="p-6 bg-gray-50/50 rounded-2xl border border-gray-100 text-center text-gray-500 font-medium">
+                        <p>No past attempts for this quiz. Be the first!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
