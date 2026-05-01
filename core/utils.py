@@ -7,9 +7,7 @@ from bs4 import BeautifulSoup
 import PyPDF2
 from django.core.mail import send_mail
 from django.conf import settings
-import google.generativeai as genai
-
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+from google import genai
 
 def generate_otp():
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
@@ -45,6 +43,7 @@ def extract_text_from_url(url):
         return ""
 
 def generate_quiz_from_ai(text, num_questions, difficulty, question_types):
+    client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
     prompt = f"""
     Generate a quiz with {num_questions} questions based on the following text.
     Difficulty: {difficulty}.
@@ -66,8 +65,10 @@ def generate_quiz_from_ai(text, num_questions, difficulty, question_types):
     """
     
     try:
-        model = genai.GenerativeModel('gemini-2.5-flash')
-        response = model.generate_content(prompt)
+        response = client.models.generate_content(
+            model='gemini-2.0-flash',
+            contents=prompt,
+        )
         response_text = response.text.strip()
         if response_text.startswith('```json'):
             response_text = response_text[7:]

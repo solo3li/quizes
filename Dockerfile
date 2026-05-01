@@ -21,8 +21,8 @@ RUN pip install --no-cache-dir -r req.txt
 # Copy project
 COPY . /app/
 
-# Create directories for static files and database
-RUN mkdir -p /app/staticfiles /app/data
+# Create directories and ensure static exists
+RUN mkdir -p /app/staticfiles /app/data /app/static
 
 # Run migrations and collect static files
 RUN python manage.py collectstatic --noinput
