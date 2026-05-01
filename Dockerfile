@@ -24,11 +24,12 @@ COPY . /app/
 # Create directories for static files and database
 RUN mkdir -p /app/staticfiles /app/data
 
-# Run migrations and collect static files (optional: can be done at runtime)
-# RUN python manage.py collectstatic --noinput
+# Run migrations and collect static files
+RUN python manage.py collectstatic --noinput
 
 # Expose port 8000
 EXPOSE 8000
 
-# Default command to run the application
-CMD python manage.py migrate && python manage.py runserver 0.0.0.0:${PORT:-8000}
+# Use Gunicorn to run the application on port 8000
+CMD python manage.py migrate && gunicorn quiz_project.wsgi:application --bind 0.0.0.0:8000 --timeout 120
+
