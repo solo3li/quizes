@@ -14,7 +14,7 @@ AI Quiz Generator Features
 - Quiz session system (each generation is a session)
 - Save quiz history per user
 - Re-attempt previous quizzes
-- Real-time quiz taking interface
+- .Real-time quiz taking interface
 - Timer-based quiz mode (optional)
 - Instant scoring after submission
 - Detailed result breakdown (correct / wrong answers)
