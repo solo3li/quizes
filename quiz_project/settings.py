@@ -19,8 +19,8 @@ SECRET_KEY = 'django-insecure-)9h9-g_c=+(eg4upquy6-2683wpm_qpa4v*5r8#=x(x9h7f)t@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['https://stations-investigators-picture-enhancement.trycloudflare.com']
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'https://quizes-production-740f.up.railway.app,https://stations-investigators-picture-enhancement.trycloudflare.com').split(',')
 
 # Application definition
 INSTALLED_APPS = [
