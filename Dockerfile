@@ -21,8 +21,8 @@ RUN pip install --no-cache-dir -r req.txt
 # Copy project
 COPY . /app/
 
-# Create a directory for static files
-RUN mkdir -p /app/staticfiles
+# Create directories for static files and database
+RUN mkdir -p /app/staticfiles /app/data
 
 # Run migrations and collect static files (optional: can be done at runtime)
 # RUN python manage.py collectstatic --noinput
@@ -31,4 +31,4 @@ RUN mkdir -p /app/staticfiles
 EXPOSE 8000
 
 # Default command to run the application
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD python manage.py migrate && python manage.py runserver 0.0.0.0:${PORT:-8000}
