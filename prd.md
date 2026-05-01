@@ -26,7 +26,7 @@ AI Quiz Generator Features
 - User authentication ( login/register /veryfy otp/resetpass)
 ```
 
-
+..
 ## mail
 mail host = "fps60y@gmail.com"
 mail pass = "srom cmoq njgw bbav"
